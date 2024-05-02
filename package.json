@@ -1,0 +1,11 @@
+{
+  "name": "create-joomla-extension-exec",
+  "module": "index.ts",
+  "type": "module",
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@dgrammatiko/create-joomla-extension": "^0.0.1-9"
+  }
+}
