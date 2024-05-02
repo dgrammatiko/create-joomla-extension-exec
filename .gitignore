@@ -1,1 +1,4 @@
 node_modules
+!dist
+!x64/
+!arm64/
