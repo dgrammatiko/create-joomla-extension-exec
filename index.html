@@ -10,15 +10,18 @@
         color-scheme: dark light;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
       }
+      *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
       body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
         height: 100vh;
       }
       footer {
         margin-top: 4rem;
+      }
+      .center {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -29,11 +32,11 @@
     <meta name="description" content="Joomla Create Extension binaries">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚒️</text></svg>">
   </head>
-  <body>
+  <body class="center">
     <main>
       <app-root>Loading...</app-root>
     </main>
-    <footer>
+    <footer class="center">
       <a href="https://github.com/dgrammatiko/create-joomla-extension-exec">Source code</a>
       <a href="https://www.npmjs.com/package/@dgrammatiko/create-joomla-extension">NPM package</a>
       <a href="https://github.com/sponsors/dgrammatiko">Sponsor</a>
@@ -43,20 +46,18 @@
 
       const version = '0.0.4';
       const data = [
-        {
-          os: 'Windows',
-          opts: ['', 'x64'],
-        },
-        {
-          os: 'Linux',
-          opts: ['', 'x64', 'arm64'],
-        },
-        {
-          os: 'MacOS',
-          opts: ['', 'x64', 'arm64'],
-        },
+        { os: 'Windows', opts: ['', 'x64'] },
+        { os: 'Linux', opts: ['', 'x64', 'arm64'] },
+        { os: 'MacOS', opts: ['', 'x64', 'arm64'] },
       ];
+
       class App extends LitElement {
+        static properties = {
+          os: { type: String },
+          cpu: { type: String },
+          opts: { type: Array },
+        };
+
         constructor() {
           super();
           this.os = '';
@@ -70,7 +71,7 @@
             select, option {
               font-family: inherit;
               font-weight: 600;
-              font-size: 2rem;
+              font-size: 1.2rem;
               min-width: 10rem;
             }
           </style>
@@ -84,14 +85,11 @@
             </select>
           </p>
           ${this.renderOpts()}
-          ${this.renderLink()}
-          `;
+          ${this.renderLink()}`;
         }
 
         renderOpts() {
-          if (this.os === '') return html``;
-
-          return html`
+          return this.os === '' ? html`` : html`
           <h2>Select your CPU type</h2>
           <p>
             <select @change=${this.onCpuChange}>
@@ -101,30 +99,19 @@
         }
 
         renderLink() {
-        if (this.os === '' || this.cpu === '') return html``;
-
-        //https://github.com/dgrammatiko/octo-repo/releases/latest
-        //https://github.com/dgrammatiko/create-joomla-extension-exec/releases/download/v${version}/${this.os.toLowerCase()}_${version}_${this.cpu}_cje${this.os === 'Windows' ? '.exe' : ''}
-          return html`<p><a href="https://github.com/dgrammatiko/create-joomla-extension-exec/releases/download/v${version}/${this.os.toLowerCase()}_${version}_${this.cpu}_cje${this.os === 'Windows' ? '.exe' : ''}" download>Download</a></p>`;
+          return (this.os === '' || this.cpu === '') ? html`` : html`<p><a href="https://github.com/dgrammatiko/create-joomla-extension-exec/releases/download/v${version}/${this.os.toLowerCase()}_${version}_${this.cpu}_cje${this.os === 'Windows' ? '.exe' : ''}" download>Download</a></p>`;
         }
 
         onOsChange(e) {
           this.os = e.target.value;
           this.cpu = '';
 
-          if (this.os === '') {
-            this.opts = [];
-          } else {
-            const current = data.find(item => item.os === this.os);
-            this.opts = current.opts;
-          }
-
-          this.requestUpdate();
+          const current = data.find(item => item.os === this.os);
+          this.opts = this.os === '' ? [] : current.opts;
         }
 
         onCpuChange(e) {
           this.cpu = e.target.value;
-          this.requestUpdate();
         }
       }
 
