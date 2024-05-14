@@ -102,7 +102,10 @@
 
         renderLink() {
         if (this.os === '' || this.cpu === '') return html``;
-          return html`<p><a href="./dist/${this.os}/${version}/${this.cpu}/cje${this.os === 'Windows' ? '.exe' : ''}" download>Download</a></p>`;
+
+        //https://github.com/dgrammatiko/octo-repo/releases/latest
+        //https://github.com/dgrammatiko/create-joomla-extension-exec/releases/download/v${version}/${this.os.toLowerCase()}_${version}_${this.cpu}_cje${this.os === 'Windows' ? '.exe' : ''}
+          return html`<p><a href="https://github.com/dgrammatiko/create-joomla-extension-exec/releases/download/v${version}/${this.os.toLowerCase()}_${version}_${this.cpu}_cje${this.os === 'Windows' ? '.exe' : ''}" download>Download</a></p>`;
         }
 
         onOsChange(e) {
