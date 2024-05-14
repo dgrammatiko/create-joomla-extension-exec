@@ -33,3 +33,9 @@ for (const os in builds) {
 	}
 }
 
+const regex = new RegExp("const version = '(.+)';", "gm");
+const subst = `const version = '${pkg.dependencies["@dgrammatiko/create-joomla-extension"]}';`;
+
+const index = await Bun.file("index.html").text();
+const result = index.replace(regex, subst);
+await Bun.write('./index.html', result);

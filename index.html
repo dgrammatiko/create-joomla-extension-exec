@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Joomla Create Extension</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+      :root {
+        color-scheme: dark light;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+      footer {
+        margin-top: 4rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
+
+    <meta name="description" content="Joomla Create Extension binaries">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚒️</text></svg>">
+  </head>
+  <body>
+    <main>
+      <app-root>Loading...</app-root>
+    </main>
+    <footer>
+      <a href="https://github.com/dgrammatiko/create-joomla-extension-exec">Source code</a>
+      <a href="https://www.npmjs.com/package/@dgrammatiko/create-joomla-extension">NPM package</a>
+      <a href="https://github.com/sponsors/dgrammatiko">Sponsor</a>
+    </footer>
+    <script type="module">
+      import { html, LitElement } from 'https://cdn.jsdelivr.net/npm/lit-element@4.0.5/+esm';
+
+      const version = '0.0.4';
+      const data = [
+        {
+          os: 'Windows',
+          opts: ['', 'x64'],
+        },
+        {
+          os: 'Linux',
+          opts: ['', 'x64', 'arm64'],
+        },
+        {
+          os: 'MacOS',
+          opts: ['', 'x64', 'arm64'],
+        },
+      ];
+      class App extends LitElement {
+        constructor() {
+          super();
+          this.os = '';
+          this.cpu = '';
+          this.opts = [];
+        }
+
+        render() {
+          return html`
+          <style>
+            select, option {
+              font-family: inherit;
+              font-weight: 600;
+              font-size: 2rem;
+              min-width: 10rem;
+            }
+          </style>
+          <h1>Create eXtension downloader</h1>
+          <p>Download the executable</p>
+          <h2>Select your operating system</h2>
+          <p>
+            <select @change=${this.onOsChange}>
+              <option value="">Select OS</option>
+              ${data.map(item => html`<option value=${item.os}>${item.os}</option>`)}
+            </select>
+          </p>
+          ${this.renderOpts()}
+          ${this.renderLink()}
+          `;
+        }
+
+        renderOpts() {
+          if (this.os === '') return html``;
+
+          return html`
+          <h2>Select your CPU type</h2>
+          <p>
+            <select @change=${this.onCpuChange}>
+              ${this.opts.map(item => html`<option value=${item} ?selected=${this.cpu === item}>${item ? item : 'Select CPU'}</option>`)}
+            </select>
+          </p>`;
+        }
+
+        renderLink() {
+        if (this.os === '' || this.cpu === '') return html``;
+          return html`<p><a href="./dist/${this.os}/${version}/${this.cpu}/cje${this.os === 'Windows' ? '.exe' : ''}" download>Download</a></p>`;
+        }
+
+        onOsChange(e) {
+          this.os = e.target.value;
+          this.cpu = '';
+
+          if (this.os === '') {
+            this.opts = [];
+          } else {
+            const current = data.find(item => item.os === this.os);
+            this.opts = current.opts;
+          }
+
+          this.requestUpdate();
+        }
+
+        onCpuChange(e) {
+          this.cpu = e.target.value;
+          this.requestUpdate();
+        }
+      }
+
+      customElements.define('app-root', App);
+    </script>
+  </body>
+</html>
