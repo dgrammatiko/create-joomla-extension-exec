@@ -32,10 +32,3 @@ for (const os in builds) {
 		await $`bun build --compile --target=bun-${os}-${build.cpu} ./index.mjs --outfile dist/${os.toLowerCase()}_${pkg.dependencies["@dgrammatiko/create-joomla-extension"]}_${build.cpu}_cje`; // v17.3.0
 	}
 }
-
-const regex = new RegExp("const version = '(.+)';", "gm");
-const subst = `const version = '${pkg.dependencies["@dgrammatiko/create-joomla-extension"]}';`;
-
-const index = await Bun.file("index.html").text();
-const result = index.replace(regex, subst);
-await Bun.write('./index.html', result);
