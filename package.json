@@ -6,6 +6,6 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@dgrammatiko/create-joomla-extension": "0.0.4"
+    "@dgrammatiko/create-joomla-extension": "0.0.7"
   }
 }
