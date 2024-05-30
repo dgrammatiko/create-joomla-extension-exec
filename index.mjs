@@ -1,1 +1,1 @@
-import "@dgrammatiko/create-joomla-extension";
+import "@dgrammatiko/create-joomla-extension/dist/index.mjs";
